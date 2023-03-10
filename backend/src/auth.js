@@ -1,12 +1,18 @@
 const { Router } = require('express')
 const router = Router()
+const { hashPassword, comparePassword } = require('../utils/helpers')
 
 const users = [
-    {
-        email: 'user0@example.com',
-        password: 'abc123'
-    },
 ]
+
+router.get('/check-login', (req, res) => {
+    if(req.cookies.logged){
+        res.send(req.cookies.logged)
+    }
+    else{
+        res.send(null)
+    }
+})
 
 router.post('/login', (req, res) => {
     const { email, password } = req.body
@@ -15,13 +21,21 @@ router.post('/login', (req, res) => {
         res.sendStatus(500)
     }
 
-    const searchUser = users.find((element) => {
-        if(element.email === email && element.password === password){
-            return true
+    const findUser = users.find((element) => {
+        if(element.email === email){
+            if(comparePassword(password, element.password)){
+                return true
+            }
         }
     })
 
-    const isValid = searchUser != undefined ? res.send('Success') : res.send('Invalid')
+    if(findUser){
+        res.cookie("logged", email, {maxAge: 60000})
+        res.send('Success')
+    } 
+    else{
+        res.send('Invalid')
+    }
 })
 
 router.post('/register', (req, res) => {
@@ -30,7 +44,6 @@ router.post('/register', (req, res) => {
     if(!email || !password) {
         console.log('missing req body')
         res.sendStatus(500)
-        return
     }
 
     const serchEmail = users.find((element) => {
@@ -42,8 +55,9 @@ router.post('/register', (req, res) => {
     const isUnique = serchEmail == undefined ? true : false
 
     if(isUnique === true){
-        users.push({ email: email, password: password})
+        users.push({ email: email, password: hashPassword(password)})
         console.log(users)
+        res.cookie("logged", email, {maxAge: 60000})
         res.send('Success')
     }
     else{

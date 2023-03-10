@@ -1,9 +1,10 @@
 const express = require('express')
-const session = require('express-session')
+const cookieParser = require('cookie-parser')
 const authRouter = require('./src/auth')
+const session = require('express-session')
 
 const app = express()
-
+app.use(cookieParser())
 app.use(function (req, res, next) {
 
     // Website you wish to allow to connect
@@ -21,16 +22,16 @@ app.use(function (req, res, next) {
 
     // Pass to next layer of middleware
     next();
-});
-
+})
 app.use(express.json())
-app.use('/auth', authRouter)
 app.use(session({
     secret: 'hojfsjafajqjwrojjoqnf',
     resave: false,
     saveUninitialized: false
-}))
+})
+)
 
+app.use('/auth', authRouter)
 
 app.listen(8080, () => {
     console.log('server started on port 8080')
