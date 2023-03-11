@@ -5,6 +5,9 @@ nav{
   width: 100vw;
   height: 7.5rem;
 }
+nav p{
+  cursor: pointer;
+}
 nav li{
   display: inline-block;
   font-size: 2em;

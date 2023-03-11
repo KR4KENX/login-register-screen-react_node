@@ -5,7 +5,7 @@ const { hashPassword, comparePassword } = require('../utils/helpers')
 const users = [
 ]
 
-router.get('/check-login', (req, res) => {
+router.get('/', (req, res) => {
     if(req.cookies.logged){
         res.send(req.cookies.logged)
     }
@@ -64,6 +64,12 @@ router.post('/register', (req, res) => {
         res.send('Not unique email')
     }
     
+})
+
+router.get('/logout', (req, res) => {
+    res.clearCookie("logged")
+    res.end()
+    res.sendStatus(200)
 })
 
 module.exports = router

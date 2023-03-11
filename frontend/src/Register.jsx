@@ -1,15 +1,12 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 function Register(props) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [registerSucces, setRegisterSucces] = useState('invisible')
     const [notUniqueEmail, setNotUniqueEmail] = useState('invisible')
-
-    useEffect(() => {
-      axios.get('http://localhost:8080/auth/check-login', { withCredentials: true }).then((e) => props.setUser(e.data))
-    }, [])
+    const navigate = useNavigate()
     
     const submitLoginData = (e) => {
         e.preventDefault()
@@ -21,12 +18,10 @@ function Register(props) {
 
     const toggleInfoVisibility = (response) => {
         if(response === 'Success'){
-            setRegisterSucces('')
-            setNotUniqueEmail('invisible')
+            navigate('/')
         }
         else{
             setNotUniqueEmail('')
-            setRegisterSucces('invisible')
         }
     }
 
@@ -40,8 +35,7 @@ function Register(props) {
               <input className='btn btn-primary btn-lg btn-block' type='button' onClick={(event) => submitLoginData(event)} value='Register' />
           </div>
         </form>
-        <h2 className='link-success mt-5 display-4' id={registerSucces}>Registered succesfuly!</h2>
-          <h2 className='link-danger mt-5 display-4' id={notUniqueEmail}>We already have account registered on this email</h2>
+        <h2 className='link-danger mt-5' id={notUniqueEmail}>We already have account registered on this email</h2>
       </main>
   )
 }
