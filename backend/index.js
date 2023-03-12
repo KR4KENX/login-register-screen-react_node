@@ -1,7 +1,10 @@
 const express = require('express')
 const cookieParser = require('cookie-parser')
 const authRouter = require('./src/auth')
+const todoRouter = require('./src/todo')
 const session = require('express-session')
+
+require('./database/index')
 
 const app = express()
 app.use(cookieParser())
@@ -32,6 +35,7 @@ app.use(session({
 )
 
 app.use('/auth', authRouter)
+app.use('/todo', todoRouter)
 
 app.listen(8080, () => {
     console.log('server started on port 8080')

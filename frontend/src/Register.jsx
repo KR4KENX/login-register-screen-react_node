@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
@@ -13,11 +13,11 @@ function Register(props) {
         const dataObj = {email: email, password: password}
         const instance = axios.create({withCredentials: true})
         instance.post('http://localhost:8080/auth/register', dataObj)
-        .then((e) => toggleInfoVisibility(e.data))
+        .then((e) => toggleInfoVisibility(e))
     }
 
     const toggleInfoVisibility = (response) => {
-        if(response === 'Success'){
+        if(response.data === 'Success'){
             navigate('/')
         }
         else{
