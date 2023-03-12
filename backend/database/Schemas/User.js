@@ -18,6 +18,10 @@ const UserSchema = new mongoose.Schema({
     ToDoList: {
         type: Array,
         default: []
+    },
+    Poster: {
+        type: Array,
+        default: []
     }
 })
 
